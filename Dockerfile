@@ -23,6 +23,7 @@ RUN mkdir -p /var/run/sshd
 RUN apt install -y openjdk-8-jdk && apt install -y curl
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
+RUN usermod -a -G root jenkins
 
 # Download Jenkins slave
 RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
