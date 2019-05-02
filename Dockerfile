@@ -10,8 +10,6 @@ ARG gid=1000
 # Make sure the package repository is up to date.
 #RUN add-apt-repository ppa:openjdk-r/ppa
 # Prepare for Chrome installation
-RUN apt-get install -y gnupg2
-RUN echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
@@ -26,6 +24,10 @@ RUN mkdir -p /var/run/sshd
 RUN apt install -y openjdk-8-jdk && apt install -y curl
 
 #Install chrome
+RUN apt-get install -y gnupg2
+RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+RUN echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get update
 RUN apt-get -y install google-chrome-stable
 
 # Add user jenkins to the image
