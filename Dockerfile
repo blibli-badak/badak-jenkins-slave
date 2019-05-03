@@ -14,6 +14,7 @@ RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
 RUN apt install -y nodejs
+RUN apt install -y npm
 
 # Install a basic SSH server
 RUN apt install -y openssh-server
