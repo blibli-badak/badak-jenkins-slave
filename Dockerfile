@@ -9,7 +9,7 @@ ARG gid=1000
 
 # Make sure the package repository is up to date.
 #RUN add-apt-repository ppa:openjdk-r/ppa
-RUN apt-get update
+RUN apt-get update --fix-missing
 RUN apt-get -y upgrade
 RUN apt install -y git
 
@@ -41,6 +41,7 @@ RUN mkdir /home/jenkins/.m2
 #ADD settings.xml /home/jenkins/.m2/
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/
 RUN apt-get install -y maven
+RUN export M2_HOME=/usr/share/maven && export PATH=$PATH:$M2_HOME/bin
 # Standard SSH port
 EXPOSE 22
 
