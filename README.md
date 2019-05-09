@@ -1,5 +1,9 @@
 ##### To Run it
-docker container run -it badak-jenkins-slave
+docker container run -it badak-jenkins-slave 
+
+Or 
+docker container run -it badak-jenkins-slave /bin/bash
+
 ##### To Buld Image locally
 docker build -t badak-jenkins-slave ./
 
