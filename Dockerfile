@@ -9,7 +9,7 @@ ARG gid=1000
 
 # Make sure the package repository is up to date.
 #RUN add-apt-repository ppa:openjdk-r/ppa
-RUN apt-get update --fix-missing
+RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
 
@@ -23,8 +23,8 @@ RUN apt install -y openjdk-8-jdk && apt install -y curl
 
 # Install Node jS
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-#RUN apt-get install -y nodejs
-RUN apt-get install -y npm
+RUN apt-get install -y nodejs
+#RUN apt-get install -y npm
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
