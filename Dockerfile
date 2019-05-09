@@ -23,7 +23,7 @@ RUN apt install -y openjdk-8-jdk && apt install -y curl
 
 # Install Node jS
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -y nodejs
+#RUN apt-get install -y nodejs
 RUN apt-get install -y npm
 
 # Add user jenkins to the image
