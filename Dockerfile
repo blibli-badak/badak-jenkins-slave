@@ -12,8 +12,7 @@ ARG gid=1000
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
-RUN apt install -y nodejs
-RUN apt install -y npm
+RUN sudo apt-get install curl && curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && apt install -y nodejs
 
 # Install a basic SSH server
 RUN apt install -y openssh-server
