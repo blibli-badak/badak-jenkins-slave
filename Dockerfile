@@ -12,6 +12,7 @@ ARG gid=1000
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
+RUN apt-get install -y maven
 RUN apt-get install -y curl && curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y nodejs
 
 # Install a basic SSH server
@@ -38,7 +39,6 @@ RUN echo "jenkins:jenkins" | chpasswd
 RUN mkdir /home/jenkins/.m2
 #ADD settings.xml /home/jenkins/.m2/
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/
-RUN apt-get install -y maven
 # Standard SSH port
 EXPOSE 22
 
