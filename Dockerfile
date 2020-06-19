@@ -27,6 +27,7 @@ RUN adduser --quiet jenkins
 RUN usermod -a -G root jenkins
 
 # Change Timezone To jakarta
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 RUN echo "Asia/Jakarta" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 RUN date
