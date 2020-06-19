@@ -26,6 +26,11 @@ RUN apt install -y openjdk-8-jdk && apt install -y curl
 RUN adduser --quiet jenkins
 RUN usermod -a -G root jenkins
 
+# Change Timezone To jakarta
+RUN echo "Asia/Jakarta" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
+RUN date
+
 # Download Jenkins slave
 RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
   && chmod 755 /usr/share/jenkins \
