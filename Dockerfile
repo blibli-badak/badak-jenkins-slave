@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 MAINTAINER Badak Team Blibli.com <argo.triwidodo@gdn-commerce.com>
 
-ARG VERSION=3.28
+ARG VERSION=4.5
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000
