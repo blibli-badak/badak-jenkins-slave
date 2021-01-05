@@ -12,7 +12,6 @@ ARG gid=1000
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
-RUN apt-get install -y maven
 RUN apt-get install -y curl && curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y nodejs
 
 # Install a basic SSH server
@@ -22,6 +21,10 @@ RUN mkdir -p /var/run/sshd
 
 # Install JDK 8 (latest edition)
 RUN apt install -y openjdk-8-jdk && apt install -y curl
+
+# Install Maven
+RUN apt-get install -y maven
+
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
 RUN usermod -a -G root jenkins
