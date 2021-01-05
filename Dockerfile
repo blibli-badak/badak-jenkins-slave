@@ -21,7 +21,10 @@ RUN mkdir -p /var/run/sshd
 
 # Install JDK 8 (latest edition)
 RUN apt install -y openjdk-8-jdk && apt install -y curl
+
+# Install Maven
 RUN apt-get install -y maven
+
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
 RUN usermod -a -G root jenkins
