@@ -1,0 +1,17 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags:        
+      - '**'           # Push events to every tag including hierarchical tags like v1.0/beta
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image And push to Docker HUB
+      run: |
+        echo "${{ secrets.DOCKER_KEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+        docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
+        docker push docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
