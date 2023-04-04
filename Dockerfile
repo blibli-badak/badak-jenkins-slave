@@ -18,9 +18,12 @@ RUN apk upgrade
 RUN apk add --update git curl openjdk11 nodejs npm maven openjfx
 
 # Install a basic SSH server
-RUN apk add openssh-server
+RUN apk add openssh
 RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/ssh/sshd_config
 RUN mkdir -p /var/run/sshd
+RUN apk add --no-cache openrc
+RUN rc-update add sshd
+RUN apk del openrc
 
 # Change Timezone To jakarta
 ENV TZ=Asia/Jakarta
