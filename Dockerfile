@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 LABEL org.opencontainers.image.authors="Badak Team Blibli.com <argo.triwidodo@gdn-commerce.com>"
 
 ARG VERSION=4.9
