@@ -13,6 +13,7 @@ RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
 RUN apt-get install -y curl && curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install -y nodejs
+RUN apt-get install -y build-essential
 
 # Install a basic SSH server
 RUN apt install -y openssh-server
