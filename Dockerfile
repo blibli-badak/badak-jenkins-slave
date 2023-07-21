@@ -44,7 +44,7 @@ RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-
 # Add Java FX
 RUN apt-get update && apt-get install -y --no-install-recommends openjfx && rm -rf /var/lib/apt/lists/*
 # Add Chrome
-RUN sudo apt install -y equivs
+RUN apt install -y equivs
 RUN equivs-control libu2f-udev
 RUN equivs-build libu2f-udev
 RUN dpkg -i libu2f-udev_1.0_all.deb
