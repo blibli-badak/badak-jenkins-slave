@@ -53,3 +53,9 @@ RUN chown -R jenkins:jenkins /home/jenkins/.m2/
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D"]
+
+WORKDIR /usr/app
+COPY ./ /usr/app
+
+# Lighthouse
+RUN npm install -D @lhci/cli
