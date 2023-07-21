@@ -49,3 +49,13 @@ RUN chown -R jenkins:jenkins /home/jenkins/.m2/
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D"]
+
+# Use the google/chrome base image
+RUN apk add chromium
+
+# Due to changes in nodejs starting version 15. When no WORKDIR is specified, will throw npm ERR! Tracker "idealTree" already exists
+WORKDIR /usr/app
+COPY ./ /usr/app
+
+# Install lhcl
+RUN npm install -D @lhci/cli @lhci/server
