@@ -25,6 +25,11 @@ RUN apt install -y openjdk-11-jdk && apt install -y curl
 
 # Install Maven
 RUN apt-get install -y maven
+# Add Chrome
+RUN apt-get install -y wget
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \ 
+    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+RUN apt-get update && apt-get -y install google-chrome-stable
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
@@ -43,14 +48,7 @@ RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-
   
 # Add Java FX
 RUN apt-get update && apt-get install -y --no-install-recommends openjfx && rm -rf /var/lib/apt/lists/*
-# Add Chrome
-RUN apt install -y equivs
-RUN equivs-control libu2f-udev
-RUN equivs-build libu2f-udev
-RUN dpkg -i libu2f-udev_1.0_all.deb
-RUN apt-get install -y wget
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt-get install ./google-chrome-stable_current_amd64.deb
+
 
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
