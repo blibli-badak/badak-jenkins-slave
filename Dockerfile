@@ -44,6 +44,10 @@ RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-
 # Add Java FX
 RUN apt-get update && apt-get install -y --no-install-recommends openjfx && rm -rf /var/lib/apt/lists/*
 # Add Chrome
+RUN sudo apt install -y equivs
+RUN equivs-control libu2f-udev
+RUN equivs-build libu2f-udev
+RUN dpkg -i libu2f-udev_1.0_all.deb
 RUN apt-get install -y wget
 RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN apt-get install ./google-chrome-stable_current_amd64.deb
