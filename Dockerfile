@@ -49,3 +49,16 @@ RUN chown -R jenkins:jenkins /home/jenkins/.m2/
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D"]
+
+# Install chromium
+RUN apk add chromium
+
+# Setup path for npm
+WORKDIR /usr/app
+COPY ./ /usr/app
+
+# Handling ERR! code UNABLE_TO_GET_ISSUER_CERT_LOCALLY
+RUN npm config set strict-ssl=false
+
+# Install lhci
+RUN npm install -D @lhci/cli
