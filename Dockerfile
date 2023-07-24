@@ -50,6 +50,14 @@ RUN npm config set strict-ssl=false
 # Install lhci
 RUN npm install -D @lhci/cli
 
+RUN apk add --no-cache \
+        openssh \
+    && ssh-keygen -A \
+    && mkdir /home/jenkins/.ssh \
+    && chmod 0700 /home/jenkins/.ssh \
+    && echo "jenkins:$(openssl rand 96 | openssl enc -A -base64)" | chpasswd \
+    && ln -s /etc/ssh/ssh_host_ed25519_key.pub /home/jenkins/.ssh/authorized_keys
+
 # Clean up apk cache
 RUN rm -rf /var/cache/apk/*
 
