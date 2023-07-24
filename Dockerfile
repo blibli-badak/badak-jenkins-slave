@@ -15,7 +15,7 @@ RUN apk --no-cache add shadow && usermod -a -G root jenkins
 # Make sure the package repository is up to date.
 RUN apk update
 RUN apk upgrade
-RUN apk add --update git curl openjdk11 nodejs npm maven openjfx
+RUN apk add --update git curl openjdk11 nodejs npm maven
 
 # Install a basic SSH server
 RUN apk add openssh
@@ -49,3 +49,16 @@ RUN chown -R jenkins:jenkins /home/jenkins/.m2/
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D"]
+
+# Install chromium
+RUN apk add chromium
+
+# Setup path for npm
+WORKDIR /usr/app
+COPY ./ /usr/app
+
+# Handling ERR! code UNABLE_TO_GET_ISSUER_CERT_LOCALLY
+RUN npm config set strict-ssl=false
+
+# Install lhci
+RUN npm install -D @lhci/cli
