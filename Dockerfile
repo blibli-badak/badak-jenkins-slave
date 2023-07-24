@@ -50,6 +50,8 @@ RUN npm config set strict-ssl=false
 # Install lhci
 RUN npm install -D @lhci/cli
 
+RUN apk add openssl
+
 RUN apk add --no-cache \
         openssh \
     && ssh-keygen -A \
