@@ -67,6 +67,7 @@ RUN rm -rf /var/cache/apk/*
 RUN echo "jenkins:jenkins" | chpasswd
 RUN mkdir /home/jenkins/.m2
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/
+RUN chown -R jenkins:jenkins /home/jenkins/.ssh/
 
 # Standard SSH port
 EXPOSE 22
