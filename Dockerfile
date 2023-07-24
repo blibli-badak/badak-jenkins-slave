@@ -37,19 +37,6 @@ RUN curl --create-dirs -o /usr/share/jenkins/slave.jar https://repo.jenkins-ci.o
   && chmod 755 /usr/share/jenkins \
   && chmod 644 /usr/share/jenkins/slave.jar
 
-# Clean up apk cache
-RUN rm -rf /var/cache/apk/*
-
-# Set password for the jenkins user (you may want to alter this).
-RUN echo "jenkins:jenkins" | chpasswd
-RUN mkdir /home/jenkins/.m2
-RUN chown -R jenkins:jenkins /home/jenkins/.m2/
-
-# Standard SSH port
-EXPOSE 22
-
-CMD ["/usr/sbin/sshd", "-D"]
-
 # Install chromium
 RUN apk add chromium
 
@@ -62,3 +49,16 @@ RUN npm config set strict-ssl=false
 
 # Install lhci
 RUN npm install -D @lhci/cli
+
+# Clean up apk cache
+RUN rm -rf /var/cache/apk/*
+
+# Set password for the jenkins user (you may want to alter this).
+RUN echo "jenkins:jenkins" | chpasswd
+RUN mkdir /home/jenkins/.m2
+RUN chown -R jenkins:jenkins /home/jenkins/.m2/
+
+# Standard SSH port
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
