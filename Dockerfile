@@ -7,7 +7,7 @@ ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
 
-# Add user jenkins to the image and add Alpine Edge Testing repositores
+# Add user jenkins to the image and add Alpine Edge Testing repositories
 RUN adduser -D jenkins
 RUN echo http://dl-2.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
 RUN apk --no-cache add shadow && usermod -a -G root jenkins
@@ -25,7 +25,7 @@ RUN apk add --no-cache openrc
 RUN rc-update add sshd
 RUN apk del openrc
 
-# Change Timezone To jakarta
+# Change Timezone To Jakarta
 ENV TZ=Asia/Jakarta
 RUN apk add --update tzdata && \
     cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
@@ -59,6 +59,11 @@ RUN apk add --no-cache \
     && chmod 0700 /home/jenkins/.ssh \
     && echo "jenkins:$(openssl rand 96 | openssl enc -A -base64)" | chpasswd \
     && ln -s /etc/ssh/ssh_host_ed25519_key.pub /home/jenkins/.ssh/authorized_keys
+
+# Run the Maven command if it's already installed
+RUN if command -v mvn &> /dev/null; then \
+    mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install-deps"; \
+fi
 
 # Clean up apk cache
 RUN rm -rf /var/cache/apk/*
