@@ -49,6 +49,20 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.c
 RUN gke-gcloud-auth-plugin --version
 RUN apt-get install -y jq
 
+# Download and install Apache JMeter
+RUN wget -qO- https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.tgz | tar xvz -C /opt && \
+    ln -s /opt/apache-jmeter-5.4.1 /opt/jmeter && \
+    rm -rf /opt/jmeter/docs
+
+# Set environment variables
+ENV JMETER_HOME /opt/jmeter
+ENV PATH $JMETER_HOME/bin:$PATH
+
+# Download and extract JMeter plugin from ZIP
+RUN wget -O /tmp/bzm-parallel-0.11.zip https://jmeter-plugins.org/files/packages/bzm-parallel-0.11.zip && \
+    unzip /tmp/bzm-parallel-0.11.zip -d /opt/jmeter/lib/ && \
+    rm /tmp/bzm-parallel-0.11.zip
+
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
 RUN mkdir /home/jenkins/.m2
