@@ -49,19 +49,12 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.c
 RUN gke-gcloud-auth-plugin --version
 RUN apt-get install -y jq
 
-# Download and install Apache JMeter
-RUN wget -qO- https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.tgz | tar xvz -C /opt && \
-    ln -s /opt/apache-jmeter-5.4.1 /opt/jmeter && \
-    rm -rf /opt/jmeter/docs
-
-# Set environment variables
-ENV JMETER_HOME /opt/jmeter
-ENV PATH $JMETER_HOME/bin:$PATH
-
-# Download and extract JMeter plugin from ZIP
-RUN wget -O /tmp/bzm-parallel-0.11.zip https://jmeter-plugins.org/files/packages/bzm-parallel-0.11.zip && \
-    unzip /tmp/bzm-parallel-0.11.zip -d /opt/jmeter/lib/ && \
-    rm /tmp/bzm-parallel-0.11.zip
+# Install Kubectl
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+RUN echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+RUN apt-get update
+RUN apt-get install -y kubectl
 
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
