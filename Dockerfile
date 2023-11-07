@@ -15,7 +15,7 @@ RUN apk --no-cache add shadow && usermod -a -G root jenkins
 # Make sure the package repository is up to date.
 RUN apk update
 RUN apk upgrade
-RUN apk add --update git curl openjdk11 nodejs npm maven openjfx
+RUN apk add --update git curl openjdk17 nodejs npm maven openjfx
 
 # Install a basic SSH server
 RUN apk add openssh
