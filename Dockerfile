@@ -21,7 +21,7 @@ RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pa
 RUN mkdir -p /var/run/sshd
 
 # Install Open JDK 11 (latest edition)
-RUN apt install -y openjdk-11-jdk && apt install -y curl
+RUN apt install -y openjdk-17-jdk && apt install -y curl
 
 # Install Maven
 RUN apt-get install -y maven
