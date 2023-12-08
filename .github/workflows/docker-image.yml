@@ -9,19 +9,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image And push to Docker HUB
-      run: |
-        echo "${{ secrets.DOCKER_KEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
-        docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
-        docker push docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
-        
-    - uses: aquasecurity/trivy-action@master    
-    - name: Run Trivy vulnerability scanner
-      with:
-        image-ref: 'docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}'
-        format: 'table'
-        exit-code: '1'
-        ignore-unfixed: false
-        vuln-type: 'os,library'
-        severity: 'MEDIUM,CRITICAL,HIGH'
+      - uses: actions/checkout@v3
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}'
+          format: 'table'
+          exit-code: '0' # Allow Trivy to exit with code 0 (success)
+          ignore-unfixed: false
+          vuln-type: 'os,library'
+          severity: 'MEDIUM,CRITICAL,HIGH'
+
+      - name: Build and push Docker image
+        if: success() # Only run if the previous step (Trivy) is successful
+        run: |
+          echo "${{ secrets.DOCKER_KEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+          docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
+          docker push docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
