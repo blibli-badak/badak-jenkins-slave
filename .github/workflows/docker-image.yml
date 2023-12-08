@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Set Docker image reference
         id: set-image-ref
         run: echo "::set-output name=image-ref::docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF#refs/tags/}"
+      - name: Build image from dockerfile
+        run: |
+          echo "${{ secrets.DOCKER_KEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
+          docker build . --file Dockerfile --tag "${{ steps.set-image-ref.outputs.image-ref }}"
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -25,9 +28,7 @@ jobs:
           vuln-type: 'os,library'
           severity: 'MEDIUM,CRITICAL,HIGH'
 
-      - name: Build and push Docker image
+      - name: Push Docker image
         if: success()
         run: |
-          echo "${{ secrets.DOCKER_KEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
-          docker build . --file Dockerfile --tag "${{ steps.set-image-ref.outputs.image-ref }}"
           docker push "${{ steps.set-image-ref.outputs.image-ref }}"
