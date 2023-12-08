@@ -15,3 +15,13 @@ jobs:
         echo "${{ secrets.DOCKER_KEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin docker.io
         docker build . --file Dockerfile --tag docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
         docker push docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}
+        
+    - uses: aquasecurity/trivy-action@master    
+    - name: Run Trivy vulnerability scanner
+      with:
+        image-ref: 'docker.io/${{ secrets.DOCKER_HUB_REPOSITORY }}:${GITHUB_REF##*/}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: false
+        vuln-type: 'os,library'
+        severity: 'MEDIUM,CRITICAL,HIGH'
