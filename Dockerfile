@@ -12,7 +12,9 @@ ARG gid=1000
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
-RUN apt-get install -y curl && curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install -y nodejs
+RUN apt-get install -y curl && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN nvm install 18
+RUN nvm use 18
 RUN apt-get install -y build-essential
 
 # Install a basic SSH server
@@ -20,7 +22,7 @@ RUN apt install -y openssh-server
 RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd
 RUN mkdir -p /var/run/sshd
 
-# Install Open JDK 11 (latest edition)
+# Install Open JDK 21 (latest edition)
 RUN apt install -y openjdk-21-jdk && apt install -y curl
 
 # Install Maven
