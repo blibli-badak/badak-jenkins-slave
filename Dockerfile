@@ -13,6 +13,8 @@ RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
 RUN apt-get install -y curl && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" 
+RUN [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 RUN nvm install 18
 RUN nvm use 18
 RUN apt-get install -y build-essential
