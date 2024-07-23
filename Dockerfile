@@ -53,8 +53,8 @@ RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-
   && chmod 755 /usr/share/jenkins \
   && chmod 644 /usr/share/jenkins/slave.jar
   
-# Add Java FX
-RUN apt-get update && apt-get install -y --no-install-recommends openjfx &&  apt-get install -y xvfb &&rm -rf /var/lib/apt/lists/*
+# Add Java FX & other appliction
+RUN apt-get update && apt-get install -y --no-install-recommends openjfx &&  apt-get install -y xvfb apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb && rm -rf /var/lib/apt/lists/*
 
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
