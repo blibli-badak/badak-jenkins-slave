@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 LABEL org.opencontainers.image.authors="Badak Team Blibli.com <argo.triwidodo@gdn-commerce.com>"
 
 ARG VERSION=4.9
@@ -12,7 +12,8 @@ ARG gid=1000
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt install -y git
-RUN apt-get install -y curl && curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt install -y nodejs
+RUN apt-get install -y curl && curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install -y nodejs
+RUN apt-get install -y build-essential
 
 # Install a basic SSH server
 RUN apt install -y openssh-server
@@ -20,10 +21,15 @@ RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pa
 RUN mkdir -p /var/run/sshd
 
 # Install Open JDK 11 (latest edition)
-RUN apt install -y openjdk-11-jdk && apt install -y curl
+RUN apt install -y openjdk-11-jdk && apt install -y curl && apt -y install libgbm1
 
 # Install Maven
 RUN apt-get install -y maven
+# Add Chrome
+RUN apt-get install -y wget
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \ 
+    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+RUN apt-get update && apt-get -y install google-chrome-stable
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
@@ -43,6 +49,7 @@ RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-
 # Add Java FX
 RUN apt-get update && apt-get install -y --no-install-recommends openjfx && rm -rf /var/lib/apt/lists/*
 
+
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
 RUN mkdir /home/jenkins/.m2
@@ -52,3 +59,9 @@ RUN chown -R jenkins:jenkins /home/jenkins/.m2/
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D"]
+
+WORKDIR /usr/app
+COPY ./ /usr/app
+
+# Lighthouse
+RUN npm install -D @lhci/cli
