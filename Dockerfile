@@ -25,9 +25,10 @@ RUN apt install -y openjdk-11-jdk && apt install -y curl && apt -y install libgb
 
 # Install Maven
 RUN apt-get install -y maven
+
 # Add Chrome
 RUN apt-get install -y wget
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \ 
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 RUN apt-get update && apt-get -y install google-chrome-stable
 
@@ -45,18 +46,22 @@ RUN date
 RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
   && chmod 755 /usr/share/jenkins \
   && chmod 644 /usr/share/jenkins/slave.jar
-  
+
 # Add Java FX
 RUN apt-get update && apt-get install -y --no-install-recommends openjfx && rm -rf /var/lib/apt/lists/*
 
 # Install xmlstarlet
 RUN apt-get update && apt-get install -y xmlstarlet
 
+# Install bc
+RUN apt-get update && apt-get install -y bc
+
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
 RUN mkdir /home/jenkins/.m2
 #ADD settings.xml /home/jenkins/.m2/
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/
+
 # Standard SSH port
 EXPOSE 22
 
