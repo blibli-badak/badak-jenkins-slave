@@ -20,8 +20,8 @@ RUN apt install -y openssh-server
 RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd
 RUN mkdir -p /var/run/sshd
 
-# Install Open JDK 11 (latest edition)
-RUN apt install -y openjdk-11-jdk && apt install -y curl &&  apt install -y openjdk-8-jdk
+# Install Open JDK 21 and 11 for running automation (latest edition)
+RUN apt install -y openjdk-11-jdk && apt install -y curl &&  apt install -y openjdk-21-jdk
 
 # Install Maven
 RUN apt-get install -y maven
