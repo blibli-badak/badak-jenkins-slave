@@ -9,11 +9,14 @@ ARG uid=1000
 ARG gid=1000
 
 # Make sure the package repository is up to date.
+# For Gcloud CLI repository
+RUN apt-get update
+RUN apt-get install -y apt-transport-https ca-certificates gnupg curl git  build-essential
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 #RUN add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt install -y git
-RUN apt-get install -y curl
 # nvm environment variables
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 18
@@ -25,7 +28,8 @@ RUN source $NVM_DIR/nvm.sh \
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
-RUN apt-get install -y build-essential
+# install gcloud CLI
+RUN apt-get install -y google-cloud-cli
 
 # Install a basic SSH server
 RUN apt install -y openssh-server
@@ -54,8 +58,7 @@ RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-
   && chmod 644 /usr/share/jenkins/slave.jar
   
 # Add Java FX
-RUN apt-get update && apt-get install -y --no-install-recommends openjfx 
-RUN apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb &&rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y --no-install-recommends openjfx libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb &&rm -rf /var/lib/apt/lists/*
 # Set password for the jenkins user (you may want to alter this).
 RUN echo "jenkins:jenkins" | chpasswd
 RUN mkdir /home/jenkins/.m2
